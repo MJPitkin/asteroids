@@ -1,4 +1,4 @@
-// starship fill: #092b1f
+//starship fill: #092b1f
 //starship edge: #00ffa5
 //starship glow: #00fc97
 //projectile fill: #ccffe1
@@ -9,6 +9,8 @@
 function init() {
   const canvas = document.querySelector("#gameWindow");
   const ctx = canvas.getContext("2d");
+  // Initialises canvas
+
   const startButton = document.querySelector("#startGame");
   startOptions = {
     once: true,
@@ -19,23 +21,23 @@ function init() {
   );
   const scoreCount = document.querySelector("#score");
   const lifeCount = document.querySelector("#lives");
-  //initialises canvas
+  let playerLives = 3;
+  let playerScore = 0;
+  // Sets up the start button (engage) to set the game running but also only run once no matter how many times the user clicks it. Additionally brings the score and lives UI elements into the DOM.
+
   let upPressed = false;
   let downPressed = false;
   let leftPressed = false;
   let rightPressed = false;
+  let playerX = 240;
+  let playerY = 160;
+  // Initialises variables for direction control and the player's starting position
   let bulletFired = false;
   let bulletCounter = 0;
-  // initialises variables for direction control
-  let playerX = 220;
-  let playerY = 140;
   let bulletX = playerX;
   let bulletY = playerY;
-  let playerLives = 3;
-  let playerScore = 0;
-  // initialises player position variables
+  // Initialises variables for controlling the ship's weapon. bulletCounter is used to determine the maximum life of a projectile after being fired
   let playerWidth = 20;
-  let playerHeight = 20;
   //initialises player size variables
   let mouseX = 0;
   let mouseY = 0;
@@ -43,9 +45,8 @@ function init() {
   let crosshairY = 0;
   let posX = 0;
   let posY = 0;
-  let deltaX = 0;
-  let deltaY = 0;
   let firingAngle = 0;
+  //Initialises variables for painting the crosshair and enabling mouse controlled aiming of the ship's weapon
   const asteroidStartPoints = [
     { x: -30, y: -30 },
     { x: 240, y: -30 },
@@ -82,26 +83,20 @@ function init() {
       status: false,
     },
   ];
-
   let newPos = 0;
-  //initialises mouse position variables to be used to calculate player rotation
+  //Initialises the coordinates 8 starting points where asteroids spawn offscreen (in an array to make random selection easier), as well as an array of objects representing the properties of each of the three asteroids that may be in motion at any given time. Newpos is a variable used as part of the drawAsteroids() function to determine the new position of an asteroid after it gets shot down.
   function drawPlayer() {
     //draws player ship
-    //needed to be done on this line rather than during the beginpath to prevent massive trails being left (although some are still remaining... possibly side effect of the whole canvas spinning.)
     ctx.beginPath();
-    ctx.arc(playerX, playerY, 20, 0, 2 * Math.PI);
+    ctx.arc(playerX, playerY, playerWidth, 0, 2 * Math.PI);
     ctx.fillStyle = "#092b1f";
     ctx.strokeStyle = "#00ffa5";
     ctx.shadowColor = "#00fc97";
     ctx.shadowBlur = 2;
     ctx.fill();
     ctx.stroke();
-    //I suspect that what's causing the constant SPEEEEEN bug is that rotate is rotating the rectangle BY the angle it's being fed, rather than TO that angle. Of note is that I'm pretty sure it stops spinning when atan is 0. It's also not pulling the position to determine the angle by from the centre of the ship, but from the origin of the canvas. ALSO you're rotating the entire bloody canvas not the ship.
     ctx.closePath();
   }
-  // function drawTarget() {
-  //   //draws incoming enemy craft
-  // }
 
   function drawPlayerBullet(bulletX, bulletY) {
     //draws player fire
@@ -112,16 +107,14 @@ function init() {
     ctx.fill();
     ctx.stroke();
     ctx.closePath();
-    // console.log("test");
   }
-  function drawPlayerCursor(bulletX, bulletY) {
-    //draws player fire
+  function drawPlayerCursor(crosshairX, crosshairY) {
+    //draws player crosshair
     ctx.beginPath();
-    ctx.arc(bulletX, bulletY, 10, 0, Math.PI * 2);
+    ctx.arc(crosshairX, crosshairY, 10, 0, Math.PI * 2);
     ctx.strokeStyle = "#00ff69";
     ctx.stroke();
     ctx.closePath();
-    // console.log("test");
   }
 
   function drawAsteroids() {
@@ -169,7 +162,7 @@ function init() {
         bulletCounter = 0;
         playerScore++;
         scoreCount.innerHTML = `SCORE: ${playerScore}`;
-        console.log("target down! Score is now:" + playerScore);
+        // console.log("target down! Score is now:" + playerScore);
       } else if (asteroids[i].counter > 300) {
         asteroids[i].status = false;
       } else if (
@@ -180,18 +173,17 @@ function init() {
         asteroids[i].status = false;
         playerLives--;
         lifeCount.innerHTML = `LIVES: ${playerLives}`;
-        console.log("you got hit! " + playerLives + " left!");
+        // console.log("you got hit! " + playerLives + " left!");
       }
     }
   }
 
   function draw() {
-    //main renderer
+    //main drawing function. Brings all the others together.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // ctx.resetTransform();
     if (playerLives <= 0) {
       alert(`Game over! Your final score was ${playerScore}!`);
-      playerLives = 3;
+      playerLives = 3; // For some reason, playerLives won't reset properly when the reload is called, leading to an infinite set of alerts. Has to be reset manually. Want to do deeper dive to understand why.
       document.location.reload();
     } else if (bulletFired === false) {
       bulletX = playerX;
@@ -224,32 +216,25 @@ function init() {
     }
     if (upPressed === true) {
       playerY -= 3;
-      if (playerY < playerHeight) {
-        playerY = playerHeight;
+      if (playerY < playerWidth) {
+        playerY = playerWidth;
       }
     }
     if (downPressed === true) {
       playerY += 3;
-      if (playerY > canvas.height - playerHeight) {
-        playerY = canvas.height - playerHeight;
+      if (playerY > canvas.height - playerWidth) {
+        playerY = canvas.height - playerWidth;
       }
     }
 
-    //Why all these ifs, you ask? Lets them be non mutually exclusive, letting you have diagonal movement. Make sure to mention this as intended in the readme.
-
-    // if (mousePressed === true) {
-    //   drawPlayerBullet();
-    // }
-    requestAnimationFrame(draw);
+    //Why all these ifs and not a switch, you ask? Lets them be non mutually exclusive, letting you have diagonal movement. Make sure to mention this as intended in the readme.
+    requestAnimationFrame(draw); // repeats draw according to the framerate of the browser
   }
-
-  //working on keyboard controls for the ship, creating controllers for keyup/keydown
 
   document.addEventListener("keyup", keyUpHandler, false);
   document.addEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("mousemove", mouseMoveHandler, false);
-  document.addEventListener("click", mouseDownHandler, false);
-  // document.addEventListener("mouseup", mouseUpHandler, false);
+  canvas.addEventListener("mousemove", mouseMoveHandler, false);
+  canvas.addEventListener("click", mouseDownHandler, false);
 
   function keyUpHandler(e) {
     if (
@@ -314,28 +299,21 @@ function init() {
     }
   }
   function mouseMoveHandler(e) {
-    crosshairX = e.pageX - canvas.getBoundingClientRect().left;
+    crosshairX = e.pageX - canvas.getBoundingClientRect().left; //necessary to subtract the actual position of the canvas element from the page x/y coordinates in order to compensate for the canvas coordinates not matching the page ones.
     crosshairY = e.pageY - canvas.getBoundingClientRect().top;
   }
 
   function mouseDownHandler(e) {
-    console.log("click");
+    // console.log("click");
     if (bulletFired === false) {
       bulletFired = true;
       mouseX = e.pageX - canvas.getBoundingClientRect().left;
       mouseY = e.pageY - canvas.getBoundingClientRect().top;
       posX = playerX;
       posY = playerY;
-      deltaX = mouseX - posX;
-      deltaY = mouseY - posY;
-      firingAngle = Math.atan2(deltaY, deltaX);
+      firingAngle = Math.atan2(mouseY - posY, mouseX - posX);
     }
   }
-
-  // function mouseUpHandler(e) {
-  //   // bulletFired = false;
-  // }
-  //consider refactoring key handlers to be switch statements
 }
 
 window.addEventListener("DOMContentLoaded", init);

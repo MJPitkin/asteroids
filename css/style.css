@@ -23,7 +23,8 @@ body {
     border-color: #00ffa5;
     border-radius: 30px;
     padding: 10px 20px;
-    font-family: 'Play', sans-serif;
+    font-family: 'Play', sans-serif; 
+    /* font-family needed as without it the engage button will not inherit the font from body */
     font-size: 18px;
 }
 
@@ -40,13 +41,16 @@ canvas {
     border-radius: 3px;
     width: 480px;
     height: 320px;
-    /* cursor: none; */
-        background-size: 40px 40px;
-        /* defines the size of a single grid square, to be repeated across the entire canvas */
-        background-image: repeating-linear-gradient(0deg, #31013b, #31013b 1px, transparent 1px, transparent 40px), repeating-linear-gradient(-90deg, #31013b, #31013b 1px, transparent 1px, transparent 40px);
-        /* draws the grid lines as a repeating set of gradients, vertical (0deg) then horizontal (-90deg), with the gradients defined by the pixel position across a single grid square. In this case, a dark purple line is drawn then abruptly stopped by a sudden transition to transparency, which then fills the rest of the square. */
+    background-size: 40px 40px;
+    /* defines the size of a single grid square, to be repeated across the entire canvas */
+    background-image: repeating-linear-gradient(0deg, #31013b, #31013b 1px, transparent 1px, transparent 40px), repeating-linear-gradient(-90deg, #31013b, #31013b 1px, transparent 1px, transparent 40px);
+    /* draws the grid lines as a repeating set of gradients, vertical (0deg) then horizontal (-90deg), with the gradients defined by the pixel position across a single grid square. In this case, a dark purple line is drawn then abruptly stopped by a sudden transition to transparency, which then fills the rest of the square. */
     }
 
 .hideMouse {
     cursor: none;
 } 
+
+label {
+    display: none;
+}
