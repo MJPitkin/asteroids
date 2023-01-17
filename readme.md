@@ -232,6 +232,8 @@ function collisionDetection() {
 
 At this point the game was basically functional. All that remained was adding some basic game over logic, improving its aesthetics and making the UI more user friendly. The first step there was to add a visible scoreboard and life counter, along with a button to start the game (as opposed to it immediately going as soon as the page loaded).
 
+![Game UI](images/image1.png)
+
 ```
 const startButton = document.querySelector("#startGame");
   startOptions = {
@@ -250,17 +252,19 @@ To facilitate the game over state, I added a condition to the start of the draw 
 
 When deciding on a colour scheme, I thought I’d try to build it with colour blindness in mind; after consulting this article, I decided that a bright green and dark purple combination would cover the widest range of user colour perception, while also looking appealing. I also found a guide on Stack Overflow for creating a square grid using the repeating-linear-gradient CSS function, done by creating extremely sharp gradients between a single pixel line of colour and a larger block of transparency, stacking two perpendicular gradients atop one another. I tidied up my HTML and added hidden labels to various elements to assist screen reader users, then arranged the elements with Flexbox and set the mouse to be hidden while the game is running and the cursor is over the canvas element (done by adding a class with the cursor: none property to the canvas on hitting the start button). Aside from needing to correct mouse coordinates with Flexbox’s placement of the canvas element, this aesthetic related phase went quite smoothly, leading to the finished game.
 
+![Final game](images/image2.png)
+
 #Challenges
 
 Rotating the ship:
 
 This was the first major hurdle the project gave me, and unfortunately it was a feature that had to be cut. I’d attempted to use the Canvas rotate() method to turn the ship around according to the position of the mouse, but doing so always seemed to leave unusual trails behind, or sometimes make the ship disappear entirely. It wasn’t until I’d experimented with it for some time that I realised what was going on:
 
-
+![rotating the whole screen bug](images/image3.png)
 
 It wasn’t rotating just the ship, it was rotating the entire rendering space of the canvas. Some searching on Stack Overflow and discussion with my tutor revealed a partial solution to this in the form of using the save() and restore() canvas methods to preserve the appearance of other elements when applying transformations to the ship specifically, but this didn’t fix another major issue; that the ships rotation would also change the position of the axes it moved along. I also found it would still leave a trail of after images behind it as I rotated it around the canvas’s origin. 
 
-
+![trails bug](images/image4.png)
 
 With these numerous issues and the fact that it was ultimately more of a cosmetic feature than a core game mechanic, having the ship visibly turn was cut and replaced by simply using a flying saucer style ship. I’m sure that the rotation I wanted is possible with canvas, but I lacked the time to spend on debugging a minor feature at the expense of the rest of the game.
 
