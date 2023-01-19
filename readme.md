@@ -254,7 +254,7 @@ When deciding on a colour scheme, I thought I’d try to build it with colour bl
 
 ![Final game](images/image2.png)
 
-#Challenges
+# Challenges
 
 Rotating the ship:
 
