@@ -52,7 +52,7 @@ I was keen to get down to writing code as soon as possible, both to find what re
 
 In terms of time management, I knew that the vast bulk of reaching the minimum viable product stage with this project would be in the JavaScript work; to that end I made that my first priority, with page layout and aesthetic decisions following once the core functionality of the game was complete. 
 
-#Build Process
+# Build Process
 
 Some people will document the build/code process by discussing the key stages they worked on. Others will do a day by day guide. It’s entirely up to you how you structure this, as long as you discuss all the key things above.
 
