@@ -54,10 +54,6 @@ In terms of time management, I knew that the vast bulk of reaching the minimum v
 
 # Build Process
 
-Some people will document the build/code process by discussing the key stages they worked on. Others will do a day by day guide. It’s entirely up to you how you structure this, as long as you discuss all the key things above.
-
-Insert your Build/Code Process here:
-
 
 The first step was to simply get something drawn on screen, even if it was for now extremely crude. I added a canvas element to my index.html and applied some very basic CSS to it to change the background colour to black. Within script.js I created a constant to represent the canvas element in the DOM, along with a context constant ctx to actually manipulate it. I then created a very simple function to draw a 50 by 50 pixel rectangle at a given set of coordinates, to be called within a main draw() function that would be triggered every repaint by requestAnimationFrame(), as well as clearing the previous frame with clearRect().
 ```
