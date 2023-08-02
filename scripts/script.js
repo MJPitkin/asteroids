@@ -177,13 +177,15 @@ function init() {
       }
     }
   }
-
-  function draw() {
+  // okay so here's the plan: pull in the timestamp that requestanimationframe provides, use that plus a past timestamp to find how much time has passed between requestanimationframe calls; if it's greater than or equal to 1/60th of a second, run the main part of the function. In this way, we can normalise the fps to 60 (and frankly if a browser can't run this game at 60 there's something wrong with the computer it's being run on)
+  function draw(timeStamp) {
     //main drawing function. Brings all the others together.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (playerLives <= 0) {
       alert(`Game over! Your final score was ${playerScore}!`);
       playerLives = 3; // For some reason, playerLives won't reset properly when the reload is called, leading to an infinite set of alerts. Has to be reset manually. Want to do deeper dive to understand why.
+
+      //so apparently this might be because reload() refreshes the page but doesn't clear the cache for the page, therefore it may well just been keeping all variables that are currently loaded.
       document.location.reload();
     } else if (bulletFired === false) {
       bulletX = playerX;
@@ -228,7 +230,7 @@ function init() {
     }
 
     //Why all these ifs and not a switch, you ask? Lets them be non mutually exclusive, letting you have diagonal movement. Make sure to mention this as intended in the readme.
-    requestAnimationFrame(draw); // repeats draw according to the framerate of the browser
+    setInterval(requestAnimationFrame(draw), 17); // repeats draw according to the framerate of the browser
   }
 
   document.addEventListener("keyup", keyUpHandler, false);
